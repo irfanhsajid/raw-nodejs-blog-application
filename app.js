@@ -49,9 +49,25 @@ const server = http.createServer(async (req, res) => {
         await blogController.handleGetPosts(req, res);
         break;
 
-      case path === "/posts" && req.method === "POST":
+      case path === "/create-post" && req.method === "POST":
         await authMiddleware.verifyToken(req, res, async () => {
           await blogController.handleCreatePost(req, res);
+        });
+        break;
+
+      case path === "/posts/:id" && req.method === "GET":
+        await blogController.handleGetPost(req, res);
+        break;
+
+      case path === "/posts/:id" && req.method === "PUT":
+        await authMiddleware.verifyToken(req, res, async () => {
+          await blogController.handleUpdatePost(req, res);
+        });
+        break;
+
+      case path === "/posts/:id" && req.method === "DELETE":
+        await authMiddleware.verifyToken(req, res, async () => {
+          await blogController.handleDeletePost(req, res);
         });
         break;
 
