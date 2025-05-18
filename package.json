@@ -1,0 +1,19 @@
+{
+  "name": "raw-nodejs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "serve": "browser-sync start --proxy 'localhost:3001' --files 'app.js'"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "browser-sync": "^3.0.4",
+    "nodemon": "^3.1.10"
+  }
+}
