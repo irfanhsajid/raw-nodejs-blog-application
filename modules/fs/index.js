@@ -17,3 +17,7 @@ const filePath = path.join(__dirname, "test.txt");
 
 // Call the readFile function
 readFile(filePath);
+
+module.exports = {
+  readFile,
+};
