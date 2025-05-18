@@ -1,5 +1,5 @@
 // modules/blog/blogModel.js
-import pool from "../../config/database.js";
+import pool from "../config/database.js";
 
 export const blogModel = {
   async createPost(title, content, userId) {

@@ -1,7 +1,7 @@
 // app.js
 import http from "http";
-import { authController } from "./modules/auth/authController.js";
-import { blogController } from "./modules/blog/blogController.js";
+import { authController } from "./modules/auth/auth-controller.js";
+import { blogController } from "./modules/blog/blog-controller.js";
 import { authMiddleware } from "./modules/common/middleware.js";
 import dotenv from "dotenv";
 
