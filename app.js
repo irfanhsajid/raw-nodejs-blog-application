@@ -13,7 +13,6 @@ const server = http.createServer(async (req, res) => {
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
-  // Handle OPTIONS requests for CORS
   if (req.method === "OPTIONS") {
     res.writeHead(200);
     res.end();
@@ -29,9 +28,12 @@ const server = http.createServer(async (req, res) => {
   await new Promise((resolve) => req.on("end", resolve));
   req.body = body;
 
-  // Routes
+  // Parse URL and path
   const url = new URL(req.url, `http://${req.headers.host}`);
   const path = url.pathname;
+
+  // Add route parameter parsing
+  const postsIdMatch = path.match(/^\/posts\/(\d+)$/);
 
   try {
     switch (true) {
@@ -55,17 +57,21 @@ const server = http.createServer(async (req, res) => {
         });
         break;
 
-      case path === "/posts/:id" && req.method === "GET":
+      // Handle dynamic route for single post
+      case !!postsIdMatch && req.method === "GET":
+        req.params = { id: parseInt(postsIdMatch[1]) };
         await blogController.handleGetPost(req, res);
         break;
 
-      case path === "/posts/:id" && req.method === "PUT":
+      case !!postsIdMatch && req.method === "PUT":
+        req.params = { id: parseInt(postsIdMatch[1]) };
         await authMiddleware.verifyToken(req, res, async () => {
           await blogController.handleUpdatePost(req, res);
         });
         break;
 
-      case path === "/posts/:id" && req.method === "DELETE":
+      case !!postsIdMatch && req.method === "DELETE":
+        req.params = { id: parseInt(postsIdMatch[1]) };
         await authMiddleware.verifyToken(req, res, async () => {
           await blogController.handleDeletePost(req, res);
         });
@@ -76,6 +82,7 @@ const server = http.createServer(async (req, res) => {
         res.end(JSON.stringify({ error: "Not found" }));
     }
   } catch (error) {
+    console.error("Server Error:", error);
     res.writeHead(500, { "Content-Type": "application/json" });
     res.end(JSON.stringify({ error: "Internal server error" }));
   }
