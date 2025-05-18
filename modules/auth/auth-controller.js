@@ -5,9 +5,20 @@ export const authController = {
   async handleRegister(req, res) {
     try {
       const { username, email, password } = JSON.parse(req.body);
-      const userId = await authService.register(username, email, password);
+      const { user, accessToken, refreshToken } = await authService.register(
+        username,
+        email,
+        password
+      );
       res.writeHead(201, { "Content-Type": "application/json" });
-      res.end(JSON.stringify({ success: true, userId }));
+      res.end(
+        JSON.stringify({
+          success: true,
+          user,
+          accessToken,
+          refreshToken,
+        })
+      );
     } catch (error) {
       res.writeHead(400, { "Content-Type": "application/json" });
       res.end(JSON.stringify({ error: error.message }));
